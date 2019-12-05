@@ -1,0 +1,50 @@
+probar con albumina
+
+acidos nucleicos fasta dict: ACGTU
+ARN dict: A,C,G,U
+
+ATGAATAGGAUGAAT
+ver si es divisible por 3
+La cadena empieza con ATG (puede no estar)
+Necesito permitirle al usuario definir cual es el marco de lectura, desde donde empieza a leer la cadena y hasta donde lee.
+Verificar si hay codones de stop (UAA,UAG,UGA) en la cadena antes del final, de ser que si notificar. Si hay varios codones de stop notificar.
+
+
+
+Levantar una secuencia FASTA => Mostrar estructura wildtype (original) y la estructura con cierta mutación
+
+Entrada:
+	Secuencia FASTA de acidos nucleicos (ADN o ARN (Hay que verificar cual nos da)). La secuencia FASTA no tiene que estar alineada (no tiene que tener guiones).
+
+Diferencia entre ADN y ARN, ADN tiene T (timina) y ARN tiene U (uracina). Depende de si es ADN o ARN es que diccionario voy a usar para traducirlo a proteina.
+
+Verificar que no es una proteina.
+
+0) Traducir. Pasar de acidos nucleicos a proteina.
+1) Verificar de que secuencia o proteina estamos hablando.
+Verificamos si hay una estructura conocida en PDB
+¿Quien soy?¿Tengo estructura?
+
+¿Quien soy? Utilizamos BLAST, busca secuencias homologas en varias bases de datos. Vamos a hacer la busqueda contra PDB porque me interesa la estructura
+
+3 posibles salidas de aca:
+	* si el porcentaje de identidad fuese menor al 40%, por ende no son homologas, asi que no me serviria de nada y lo notificaria al usuario (no hay modelo posible).
+	
+	* si el porcentaje de identidad fuese 99% o más implica que este resultado es la proteina ingresada por el usuario, asi que ya tenemos la estructura wildtype (original)
+
+	* si el porcentaje de identidad es 40% < identidad < 99%; tenemos que modelar con Modeler
+
+Una vez hecho esto ya tengo la estructura wildtype (original).
+Ahora tenemos que mutar la secuencia (guarda con que se cree un codon de stop y me trunque la proteina) y volver a modelar contra la estructura que me traje en el anterior paso.
+Mostrar el modelado original y final en una sola pantalla alineado (pymoll o libreria de pymoll de biopyton).
+
+
+
+el BLAST tira 1A4O-B    1A4O = id PDB  B= cadena de la proteina
+
+biopython te deja descargarte el PDB
+
+¿splitear la cadena (biopython o pymol)?¿O pasarle la cadena entera a modeler y decirle que solo use la cadena que quiero (ver parametros de modeler)?
+
+
+Si luego de la mutacion se generaron codones de stop y la cadena trunca resultado de este queda con menos del 40% de la longitud de la cadena original no sirve y notificar
