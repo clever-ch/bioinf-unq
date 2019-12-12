@@ -48,3 +48,18 @@ biopython te deja descargarte el PDB
 
 
 Si luego de la mutacion se generaron codones de stop y la cadena trunca resultado de este queda con menos del 40% de la longitud de la cadena original no sirve y notificar
+
+
+
+******AL tabajar con MODELLER******
+1.Convertir FASTA to PIR para alinearlas (sar programa de profe)
+2.Alinear (dejar solo una secuencia en el archivo pir y alinear con el programa de la profe (tarda un rato)). Crea 2 archivos, un .ali (que es el que tiene la alineacion que me iteresa) y un .pap
+3.Usamos el .ali generado de la alineacion con el otro programa de la profe (cambiar para que agarre el archivo correspondiente)(Preguntar al usuario cuantos modelos quiere hacer)
+4.Viendo la tablita que te da al final, determinar cual de todos los modelos es mejor (averiguar la importancia de molpdf, DOPE,
+GA341)
+	(https://salilab.org/archives/modeller_usage/2006/msg00214.html)
+	(busqueda google: best model molpdf, DOPE,GA341)
+	(https://salilab.org/modeller/manual/node31.html)
+
+5.Con el mejor PDB voya a querer mostrar el dibujito (pymol sugiere la profe o rasmol (cual sea mas facil)) del modelado original y final. (https://pymolwiki.org/index.php/Launching_From_a_Script)
+
