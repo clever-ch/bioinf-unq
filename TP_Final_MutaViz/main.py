@@ -70,7 +70,8 @@ if __name__ == '__main__':
     root.withdraw()
 
     fastaFileDirection = filedialog.askopenfilename(title = 'Seleccione archivo FASTA')
-
+    print("Archivo ingresado")
+    print(fastaFileDirection)
     secuencias = list(SeqIO.parse(fastaFileDirection, "fasta"))
 
     if len(secuencias) > 0:
