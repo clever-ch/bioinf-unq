@@ -21,8 +21,8 @@ print('Archivo ingresado: ' + fastaFile)
 a = alignment(e, file=fastaFile, alignment_format='FASTA')
 nombreFile = fastaFile.split('/')[-1].split('.')[0]
 
-a.write(file='%s.pir'%nombreFile, alignment_format='PIR')       #Esto me retorna un archivo .ali
-print('Archivo .ali generado: ' + nombreFile)
+a.write(file='%s.pir'%nombreFile, alignment_format='PIR')       #Esto me retorna un archivo .pir
+print('Archivo .pir generado: ' + nombreFile)
 
 print('--Fin log Fasta to Pir--')
 sys.stdout.close()
@@ -59,7 +59,7 @@ env.io.hetatm = True
 a = automodel(env,
               alnfile=target,  # alignment filename
               knowns=('3V03'),  # codes of the templates
-              sequence='NM_134326',
+              sequence='NM_134326.2|ALBU_RAT',
               assess_methods=(assess.DOPE, assess.GA341))  # code of the target
 a.starting_model = 1  # index of the first model
 a.ending_model = 2  # index of the last model
