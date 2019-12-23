@@ -7,15 +7,12 @@ from Bio.PDB import PDBList
 #Dependencias para GUI
 import tkinter as tk
 from tkinter import filedialog, messagebox
+
 #Dependencia para abortar/terminar programa
 import sys
 
 #BLAST
 from Bio.Blast import NCBIXML
-
-#Dependencias para descargar PDB
-import urllib.request
-import shutil
 
 #Dependencias para mutacion manual
 import os, subprocess, tempfile
@@ -35,10 +32,6 @@ proteinaLetras = {'E','F','I','J','L','O','P','Q','Z'}
 ARNLetras = {'A','C','G','U'}
 
 
-#proteina = "ACCGGUUUAACUUGE"
-#ARN = "ACCGGUUUAACUUGA"
-#ADN = "ACCGGTTTAACTTGA"
-
 def isProtein(fasta):
     letrasUnicas = set(fasta)
     i = proteinaLetras.intersection(letrasUnicas)
@@ -50,14 +43,6 @@ def isADN(fasta):
 def isARN(fasta):
     return 'U' in fasta
 
-# print(isProtein(proteina))
-# print(isADN(ADN))
-# print(isARN(ARN))
-#
-# messenger_rna = Seq("AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG", generic_rna)
-# print(messenger_rna.translate())
-# coding_dna = Seq("ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG", generic_dna)
-# print(coding_dna.translate())
 
 
 #Elimina los guines de la secuencia si es que los hubiese
@@ -118,47 +103,13 @@ def score(align):
     return align.hsps[0].score
 
 def bestAlign(aligns):
-    '''
-   for alignment in blast_record.alignments:
-       print("****align****")
-       print("IDENTIDAD: ", identidadPorcenaje(alignment))
-       for hsp in alignment.hsps:
-       #if hsp.expect < E_VALUE_THRESH:
-           print("****Alignment****")
-
-           print("sequence:", alignment.title)
-
-           print("identity:", hsp.identities)
-
-           print("length:", alignment.length)
-
-           print("e value:", hsp.expect)
-
-           print(hsp.query[0:75] + "...")
-
-           print(hsp.match[0:75] + "...")
-
-           print(hsp.sbjct[0:75] + "...")
-   '''
-
     #Se ordena segun los siguientes criterios:
-    #pordentaje de identidad (decreciente), e value (creciente), score (decreciente)
+    #porcentaje de identidad (decreciente), e value (creciente), score (decreciente)
     ordenado = sorted(aligns, key=lambda a: (identidadPorcenaje(a), -eValue(a), score(a)), reverse=True)
-
-    '''
-    for alignment in ordenado:
-        print("****align****")
-        print("sequence:", alignment.title)
-        print("IDENTIDAD: ", identidadPorcenaje(alignment))
-        print("e value:", alignment.hsps[0].expect)
-        print("score: ", alignment.hsps[0].score)
-    '''
-
     best = ordenado[0]
 
     if identidadPorcenaje(best) < 40:
         abortarYMensaje("No se ha encontrado secuencia homologa")
-
 
     return best
 
@@ -279,7 +230,6 @@ if __name__ == '__main__':
     print(pdbWyldTypeName)
     pdbWyldTypeName = pdbWyldTypeDir.split('/')[1].split('.')[0]
     print(pdbWyldTypeName)
-    #print(pdbl)
 
 
 
@@ -324,12 +274,6 @@ if __name__ == '__main__':
     #modelado de proteina mutada
     pdbMutacionName = modelado(pdbWyldTypeName)
 
-    '''
-    pymol.finish_launching()
-    __main__.pymol_argv = ['pymol', '-qc']  # Pymol: quiet and no GUI
-    pymol.cmd.load(nombrePdbInc + '.pdb')  # './le/'+ nombrePdbInc + '.pdb'
-    pymol.cmd.load(pdb_mutacion)
-    '''
 
     pymol.finish_launching()
     __main__.pymol_argv = ['pymol', '-qc']  # Pymol: quiet and no GUI
