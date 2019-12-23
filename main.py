@@ -59,7 +59,6 @@ def divisiblePor3(secuencia):
     if len(secuencia) % 3 != 0:
         print("La secuencia no es divisible por 3")
         ret = False
-    print(f'Divisible por 3: {ret}')
     return ret
 
 
@@ -87,7 +86,6 @@ def hayCodonesStop(secuencia):
     else:
         print('No hay codones de stop')
         ret = False
-    print(f'Hay codones stop: {ret}')
     return ret
 
 #Verifica que haya un codon de inicio
@@ -101,7 +99,6 @@ def hayCodonStart(secuencia):
     else:
         print('Hay codon de Inicio')
         ret = True
-    print(f'Hay Codones start: {ret}')
     return ret
 
 #Verifica que la secuencia sea valida
@@ -214,6 +211,8 @@ if __name__ == '__main__':
     desalinear(seq_selected)
 
 
+    #Verificacion que la secuencia no sea una proteina
+    #Si esta bien me aseguro de pasarlo a ARN
     if isProtein(seq_selected.seq):
         print("La secuencia es una proteina")
         sys.exit(0)
@@ -354,6 +353,11 @@ if __name__ == '__main__':
     #Se le pide al usuario la cantidad de modelos que desea que se realisen
     #Se selecciona como mejor modelo aquel con mejor (menor) DOPE score
     pdbMutacionName = modelado(pdbWyldTypeName)
+
+    print("\nPDB Secuencia Original")
+    print(pdbWyldTypeDir)
+    print("PDB Secuencia Mutada")
+    print(pdbMutacionName)
 
     # *******************************
     #Visualizacion PDBs con Pymol
