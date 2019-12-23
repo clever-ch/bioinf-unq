@@ -55,5 +55,5 @@ MutaViz es un software de experimentación y visualización de mutaciones sobre 
 7. Se imprime la ubicacion del PDB de la secuencia original y el de la mutada (la ubicacion es desde la posicion del archivo main.py)
 
 ### Autores
-- Clever
+- Clever Chuquimia
 - Julián Uriel Espinoza
