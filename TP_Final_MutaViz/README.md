@@ -13,4 +13,4 @@ MutaViz es un software de experimentación y visualización de mutaciones sobre 
 - PyMol
 - IDE a elección del usuario con el cual pueda correr los archivos de python
 
-Nota: Para más información detallada revise los casos de uso.
+Nota: Para más información detallada revise la seccion de documentacion.
