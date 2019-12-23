@@ -177,7 +177,8 @@ if __name__ == '__main__':
 
     #Solicito la ubicacion del archivo FASTA
     fastaFileDirection = filedialog.askopenfilename(title = 'Seleccione archivo FASTA')
-
+    print("Archivo ingresado")
+    print(fastaFileDirection)
     secuencias = list(SeqIO.parse(fastaFileDirection, "fasta"))
 
     #Si en el archivo FASTA habia mas de una secuencia consulto cual desea utilizar
