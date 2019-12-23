@@ -9,6 +9,7 @@ MutaViz es un software de experimentación y visualización de mutaciones sobre 
 - Visualizarla
 
 ### Requisitos
+- Ubuntu (_Versión utilizada 18.04_)
 - Python (_Versión utilizada 3.8_)
 - Vi
 - [BioPython](https://biopython.org/wiki/Download)
