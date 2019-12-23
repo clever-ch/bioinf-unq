@@ -352,7 +352,7 @@ if __name__ == '__main__':
     #Modelado de proteina mutada
     # *******************************
     #Se le pide al usuario la cantidad de modelos que desea que se realisen
-    #Se selecciona como mejor modelo aquel con mayor DOPE score
+    #Se selecciona como mejor modelo aquel con mejor (menor) DOPE score
     pdbMutacionName = modelado(pdbWyldTypeName)
 
     # *******************************
