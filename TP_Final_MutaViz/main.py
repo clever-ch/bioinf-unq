@@ -17,14 +17,22 @@ from Bio.Blast import NCBIXML
 import urllib.request
 import shutil
 
+#Dependencias para mutacion manual
+import os, subprocess, tempfile
+
+#Dependencia para modelado
+from modelado import *
+
 #Pymol
-#import pymol
-#from pymol import cmd
+import pymol
+from pymol import cmd
+import __main__
 
 #Constantes
 CODONS_STOP = ('UAA', 'UAG', 'UGA')
 CODON_START = ['AUG']
 proteinaLetras = {'E','F','I','J','L','O','P','Q','Z'}
+ARNLetras = {'A','C','G','U'}
 
 
 #proteina = "ACCGGUUUAACUUGE"
@@ -166,6 +174,21 @@ def pdbId(align):
     return pdbId
 
 
+def soloLetrasARN(seq):
+    letrasUnicas = set(seq)
+    letrasUnicas.discard('\n')
+    print(letrasUnicas)
+    print(letrasUnicas == ARNLetras)
+    #return letrasUnicas == ARNLetras
+    if letrasUnicas != ARNLetras:
+        abortarYMensaje("La secuencia debe ser un ARN valido")
+
+def guardarFastaMutacion(seqOriginal,seqMutada):
+    fastaMutacionFile = open('secuencia_original_y_mutada.fasta','w')
+    fastaMutacionFile.write('>Mutacion\n' + str(seqMutada.translate()) + '\n')
+    fastaMutacionFile.write('>Original\n' + str(seqOriginal.translate()) + '\n')
+    fastaMutacionFile.close()
+
 if __name__ == '__main__':
 
     root = tk.Tk()
@@ -210,7 +233,7 @@ if __name__ == '__main__':
 
 
     print(seq_selected)
-    quiereMarcoLectura = input("¿Desea definir un marco de lectura? Y/N")
+    quiereMarcoLectura = input("¿Desea definir un marco de lectura? Y/N:  ")
     if quiereMarcoLectura == 'Y':
         marcoLectura = (int(input("Inicio: ")), int(input("Final: ")))
         seq_selected = seq_selected[marcoLectura[0]:marcoLectura[1]]
@@ -223,14 +246,19 @@ if __name__ == '__main__':
     hayCodonStart(seq_selected)
     print(seq_selected)
 
+
+
     #BLAST
+    print("Consultando contra BLAST. Aguarde un momento...")
     result_handle = NCBIWWW.qblast("blastx", "pdb", seq_selected)
     with open("my_blast.xml", "w") as save_file:
         blast_results = result_handle.read()
         save_file.write(blast_results)
 
     result_handle.close()
-
+    
+    
+    #Parseo BLAST
     result_handle = open("my_blast.xml")
     blast_record = NCBIXML.read(result_handle)
 
@@ -241,20 +269,69 @@ if __name__ == '__main__':
     print("e value:", best.hsps[0].expect)
     print("score: ", best.hsps[0].score)
 
-    '''
-    url = "files.rcsb.org/download/3LEE.pdb"
-    file_name = "3LEE.pdb"
-    
-    
-    # Download the file from `url` and save it locally under `file_name`:
-    with urllib.request.urlopen(url) as response, open(file_name, 'wb') as out_file:
-        shutil.copyfileobj(response, out_file)
-    '''
 
     bestPDBId = pdbId(best)
 
-
-    #urllib.request.urlretrieve(url, file_name)
+    #Descarga PDB
+    
     pdbl = PDBList()
-    pdbl.retrieve_pdb_file(bestPDBId, file_format='pdb' ,pdir='PDB')
-    print(pdbl)
+    pdbWyldTypeDir = pdbl.retrieve_pdb_file(bestPDBId, file_format='pdb' ,pdir='PDB')
+    print(pdbWyldTypeName)
+    pdbWyldTypeName = pdbWyldTypeDir.split('/')[1].split('.')[0]
+    print(pdbWyldTypeName)
+    #print(pdbl)
+
+
+
+    #Mutacion Manual de la secuencia
+    print("")
+    print("A continuacion se le solcita que haga alguna mutacion a la secuencia ARN")
+    print("Para esto se abrira el editor Vi. Al finalizar sus cambios guarde salga del editor.")
+    print("Recordatorio: para guardar y salir de Vi, precione Esc e introduzca el comando ':wq'")
+    input("presione Enter para continuar")
+    (fd, path) = tempfile.mkstemp()
+    fp = os.fdopen(fd, 'w')
+    fp.write(str(seq_selected))
+    fp.close()
+
+    editor = os.getenv('EDITOR', 'vi')
+    print(editor, path)
+    subprocess.call('%s %s' % (editor, path), shell=True)
+
+    with open(path, 'r') as f:
+        seq_mutated = f.read().rstrip()
+        print(seq_mutated)
+
+
+    os.unlink(path)
+
+    # Chequeos de la secuencia mutada
+    # todo: bucle de mutacion
+    soloLetrasARN(seq_mutated)
+    seq_mutated = Seq(seq_mutated, generic_rna)
+    divisiblePor3(seq_mutated)
+    hayCodonesStop(seq_mutated)
+    hayCodonStart(seq_mutated)
+
+    print("Secuencia Original")
+    print(seq_selected)
+    print("")
+    print("Secuencia Mutada")
+    print(seq_mutated)
+
+    guardarFastaMutacion(seq_selected, seq_mutated)
+
+    #modelado de proteina mutada
+    pdbMutacionName = modelado(pdbWyldTypeName)
+
+    '''
+    pymol.finish_launching()
+    __main__.pymol_argv = ['pymol', '-qc']  # Pymol: quiet and no GUI
+    pymol.cmd.load(nombrePdbInc + '.pdb')  # './le/'+ nombrePdbInc + '.pdb'
+    pymol.cmd.load(pdb_mutacion)
+    '''
+
+    pymol.finish_launching()
+    __main__.pymol_argv = ['pymol', '-qc']  # Pymol: quiet and no GUI
+    pymol.cmd.load(pdbWyldTypeDir)
+    pymol.cmd.load(pdbMutacionName)
