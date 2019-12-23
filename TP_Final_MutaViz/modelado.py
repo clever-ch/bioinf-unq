@@ -1,5 +1,5 @@
-from modeller import * # Load standard Modeller classes
-from modeller.automodel import *  # Load the automodel class
+from modeller import *
+from modeller.automodel import *
 
 def modelado(pdb):
 
@@ -42,7 +42,7 @@ def modelado(pdb):
     print('template:    '+template)
     print('nameFile:    '+nameFile)
 
-    cantModelos = input('¿Cuantos modelos desea que Modeller realice?')
+    cantModelos = input('\n¿Cuantos modelos desea que Modeller realice?')
 
     a = automodel(env,
                   alnfile='ALI/%s.ali' % (alignName),  # alignment filename
